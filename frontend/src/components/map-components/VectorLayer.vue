@@ -1,4 +1,5 @@
 <template>
+  <l-marker-cluster>
     <l-geo-json
         :name="layerData.name"
         :geojson="layerData.data"
@@ -6,11 +7,15 @@
         :visible="getLayerVisibility.bind(this, layerData.id)()"
         layer-type="overlay"
     ></l-geo-json>
+  </l-marker-cluster>
 </template>
 
 <script>
-import { LGeoJson } from "vue2-leaflet";
-import { mapGetters } from "vuex";
+import {LGeoJson} from "vue2-leaflet";
+import Vue2LeafletMarkercluster from 'vue2-leaflet-markercluster';
+import {mapGetters} from "vuex";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 export default {
     name: "VectorLayer",
@@ -18,10 +23,11 @@ export default {
         layerData: Object,
     },
     components: {
-        LGeoJson,
+        'l-geo-json': LGeoJson,
+        'l-marker-cluster': Vue2LeafletMarkercluster,
     },
     methods: {
-        getChoroplethColor(d) {            
+        getChoroplethColor(d) {
             const index = this.layerData.style.choropleth.bins.findIndex(
                 (item) => d > item
             );
@@ -31,6 +37,9 @@ export default {
     },
     computed: {
         ...mapGetters(["getLayerVisibility"]),
+        clusterOptions() {
+          return {disableClusteringAtZoom: 11 };
+        },
         options() {
             return {
                 onEachFeature: this.onEachFeatureFunction,
@@ -55,7 +64,7 @@ export default {
                     lineCap: this.layerData.style.lineCap || "round",
                     lineJoin: this.layerData.style.lineJoin || "round",
                     dashArray: this.layerData.style.dashArray || null,
-                    dashOffset: this.layerData.style.dashOffset || null,                    
+                    dashOffset: this.layerData.style.dashOffset || null,
                     fillColor: this.layerData.style.choropleth
                         ? this.getChoroplethColor(
                               feature.properties[
