@@ -186,7 +186,7 @@ class AddHexPrefixForCharts(ast.NodeTransformer):
 def run_script(script_name, input_updates, hex_token_generator):
     script_dir = str(pathlib.Path(script_name).parent)
 
-    with open(script_name) as f:
+    with open(script_name, encoding='utf8') as f:
         lines = f.read()
         user_code = ast.parse(lines, script_name)
 
