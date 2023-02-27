@@ -34,7 +34,7 @@ class DrawFeature:
 
     def get_value(self):
         id, name = self.input_name.split("_")
-        if name in self.input_updates:
+        if name in self.input_updates and self.input_updates.get(name):
             return draw_feature_dict_2_gdf(self.input_updates.get(name))
 
         return self.features
