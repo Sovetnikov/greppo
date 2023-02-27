@@ -61,6 +61,8 @@ class DrawFeature:
 
 
 def draw_feature_dict_2_gdf(features_dict):
+    if not features_dict:
+        return gdf(columns=['id', 'geometry'], geometry='geometry')
     features_list = []
     for feature in features_dict:
         _points = []
